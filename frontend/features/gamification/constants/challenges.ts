@@ -1,0 +1,58 @@
+import type { Challenge } from "@/types/gamification.types";
+
+export const CHALLENGES: Challenge[] = [
+  {
+    id:       "ch_first",
+    icon:     "🎯",
+    title:    "Primera calificación",
+    subtitle: "Califica tu primera película",
+    xpReward: 50,
+    goal:     1,
+    getProgress: ({ totalRated }) => Math.min(totalRated, 1),
+  },
+  {
+    id:       "ch_streak3",
+    icon:     "🔥",
+    title:    "Racha de 3",
+    subtitle: "Califica 3 películas",
+    xpReward: 100,
+    goal:     3,
+    getProgress: ({ totalRated }) => Math.min(totalRated, 3),
+  },
+  {
+    id:       "ch_genres",
+    icon:     "🎭",
+    title:    "Explorador de géneros",
+    subtitle: "Califica películas de 3 géneros distintos",
+    xpReward: 150,
+    goal:     3,
+    getProgress: ({ genresExplored }) => Math.min(genresExplored, 3),
+  },
+  {
+    id:       "ch_favorites",
+    icon:     "❤️",
+    title:    "Colección inicial",
+    subtitle: "Agrega 3 películas a favoritos",
+    xpReward: 75,
+    goal:     3,
+    getProgress: ({ totalFavorites }) => Math.min(totalFavorites, 3),
+  },
+  {
+    id:       "ch_half",
+    icon:     "🌗",
+    title:    "A mitad de camino",
+    subtitle: "Califica 8 películas",
+    xpReward: 200,
+    goal:     8,
+    getProgress: ({ totalRated }) => Math.min(totalRated, 8),
+  },
+  {
+    id:       "ch_complete",
+    icon:     "💎",
+    title:    "Colección completa",
+    subtitle: "Califica las 16 películas del catálogo",
+    xpReward: 500,
+    goal:     16,
+    getProgress: ({ totalRated }) => Math.min(totalRated, 16),
+  },
+];

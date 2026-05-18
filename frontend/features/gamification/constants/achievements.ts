@@ -1,0 +1,111 @@
+import type { Achievement } from "@/types/gamification.types";
+
+export const ACHIEVEMENTS: Achievement[] = [
+  {
+    id:          "first_rating",
+    icon:        "🎬",
+    name:        "Primer Clip",
+    description: "Califica tu primera película",
+    xpReward:    50,
+    rarity:      "common",
+    check:       ({ totalRated }) => totalRated >= 1,
+  },
+  {
+    id:          "five_ratings",
+    icon:        "🌟",
+    name:        "Cinéfilo",
+    description: "Califica 5 películas",
+    xpReward:    100,
+    rarity:      "common",
+    check:       ({ totalRated }) => totalRated >= 5,
+  },
+  {
+    id:          "ten_ratings",
+    icon:        "🏆",
+    name:        "Crítico Experto",
+    description: "Califica 10 películas",
+    xpReward:    200,
+    rarity:      "uncommon",
+    check:       ({ totalRated }) => totalRated >= 10,
+  },
+  {
+    id:          "all_ratings",
+    icon:        "💎",
+    name:        "Completista",
+    description: "Califica las 16 películas del catálogo",
+    xpReward:    500,
+    rarity:      "legendary",
+    check:       ({ totalRated }) => totalRated >= 16,
+  },
+  {
+    id:          "three_favorites",
+    icon:        "❤️",
+    name:        "Coleccionista",
+    description: "Agrega 3 películas a favoritos",
+    xpReward:    75,
+    rarity:      "common",
+    check:       ({ totalFavorites }) => totalFavorites >= 3,
+  },
+  {
+    id:          "five_favorites",
+    icon:        "💕",
+    name:        "Amante del Cine",
+    description: "Agrega 5 películas a favoritos",
+    xpReward:    120,
+    rarity:      "uncommon",
+    check:       ({ totalFavorites }) => totalFavorites >= 5,
+  },
+  {
+    id:          "max_rating",
+    icon:        "🎯",
+    name:        "Puntuación Perfecta",
+    description: "Dale 5 estrellas a una película",
+    xpReward:    50,
+    rarity:      "common",
+    check:       ({ hasMaxRating }) => hasMaxRating,
+  },
+  {
+    id:          "genre_explorer",
+    icon:        "🗺️",
+    name:        "Explorador de Géneros",
+    description: "Califica películas de 4 géneros distintos",
+    xpReward:    150,
+    rarity:      "uncommon",
+    check:       ({ genresExplored }) => genresExplored >= 4,
+  },
+  {
+    id:          "level_4",
+    icon:        "🚀",
+    name:        "Evolucionado",
+    description: "Alcanza el Nivel 4 — Experto en Streaming",
+    xpReward:    300,
+    rarity:      "epic",
+    check:       ({ level }) => level >= 4,
+  },
+  {
+    id:          "high_standards",
+    icon:        "🧐",
+    name:        "Estándares Altos",
+    description: "Mantén un rating promedio menor a 3",
+    xpReward:    80,
+    rarity:      "uncommon",
+    check:       ({ avgRating, totalRated }) =>
+                   totalRated >= 5 && avgRating < 3,
+  },
+];
+
+export const RARITY_COLORS: Record<Achievement["rarity"], string> = {
+  common:    "#10b981",
+  uncommon:  "#3b82f6",
+  rare:      "#a855f7",
+  epic:      "#ec4899",
+  legendary: "#f59e0b",
+};
+
+export const RARITY_LABELS: Record<Achievement["rarity"], string> = {
+  common:    "Común",
+  uncommon:  "Poco común",
+  rare:      "Raro",
+  epic:      "Épico",
+  legendary: "Legendario",
+};

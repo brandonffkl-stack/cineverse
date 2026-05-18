@@ -1,0 +1,129 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ── Usuario ───────────────────────────────────────────────────────
+model User {
+  id          String   @id @default(cuid())
+  email       String   @unique
+  username    String   @unique
+  displayName String
+  password    String
+  avatarUrl   String?
+  bio         String?
+  totalXP     Int      @default(0)
+  level       Int      @default(1)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  ratings      Rating[]
+  favorites    Favorite[]
+  achievements UserAchievement[]
+  challenges   UserChallenge[]
+
+  @@map("users")
+}
+
+// ── Película ──────────────────────────────────────────────────────
+model Movie {
+  id          String   @id @default(cuid())
+  title       String
+  slug        String   @unique
+  year        Int
+  genre       String
+  platform    String
+  imdbRating  Float
+  imdbVotes   Int      @default(0)
+  posterEmoji String   @default("🎬")
+  posterColor String   @default("#1a1a3e")
+  description String
+  director    String?
+  runtime     Int?
+  language    String   @default("en")
+  createdAt   DateTime @default(now())
+
+  ratings   Rating[]
+  favorites Favorite[]
+
+  @@map("movies")
+}
+
+// ── Calificación ──────────────────────────────────────────────────
+model Rating {
+  id         String   @id @default(cuid())
+  stars      Int
+  review     String?
+  xpAwarded  Int      @default(25)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId  String
+  movie   Movie  @relation(fields: [movieId], references: [id], onDelete: Cascade)
+  movieId String
+
+  @@unique([userId, movieId])
+  @@map("ratings")
+}
+
+// ── Favorito ──────────────────────────────────────────────────────
+model Favorite {
+  createdAt DateTime @default(now())
+
+  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId  String
+  movie   Movie  @relation(fields: [movieId], references: [id], onDelete: Cascade)
+  movieId String
+
+  @@id([userId, movieId])
+  @@map("favorites")
+}
+
+// ── Logro ─────────────────────────────────────────────────────────
+model Achievement {
+  id          String @id @default(cuid())
+  key         String @unique
+  name        String
+  description String
+  iconUrl     String @default("🏆")
+  xpReward    Int    @default(50)
+  rarity      String @default("common")
+
+  users UserAchievement[]
+
+  @@map("achievements")
+}
+
+// ── Logro desbloqueado por usuario ───────────────────────────────
+model UserAchievement {
+  unlockedAt DateTime @default(now())
+
+  user          User        @relation(fields: [userId],        references: [id], onDelete: Cascade)
+  userId        String
+  achievement   Achievement @relation(fields: [achievementId], references: [id], onDelete: Cascade)
+  achievementId String
+
+  @@id([userId, achievementId])
+  @@map("user_achievements")
+}
+
+// ── Reto de usuario ───────────────────────────────────────────────
+model UserChallenge {
+  id          String   @id @default(cuid())
+  challengeId String
+  progress    Int      @default(0)
+  completed   Boolean  @default(false)
+  completedAt DateTime?
+  createdAt   DateTime @default(now())
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+
+  @@unique([userId, challengeId])
+  @@map("user_challenges")
+}
